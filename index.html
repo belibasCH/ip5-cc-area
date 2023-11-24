@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="" href="style.css">
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+
+    <div id="app">
+        <div id="editor-container">
+            <div id="chart-container">
+                <svg id="chart-svg" height="300px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'">
+                    <rect id="chart" x="0" y="0" width="100%" height="100%" fill="orange" />
+                </svg>
+                <svg id="chart-svg" height="300px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'">
+                    <rect x="0" y="0" :width="startEdit" height="100%" fill="white" style="opacity: 0.5;" />
+                    <rect :x="endEdit" y="0" :width="durationTotal-endEdit" height="100%" fill="white" style="opacity: 0.5;" />
+                </svg>
+            </div>
+            <div id="control-container">
+                <svg id="area-control" height="20px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'"
+                    preserveAspectRatio="none">
+                    <rect x="0" y="0" width="100%" height="100%" fill="grey" style="opacity: 0.5;" />
+                    <rect id="dragable" @mousedown="handleMouseDown" :x="startEdit" y="0" :width="endEdit-startEdit" height="100%" fill="grey"
+                        style="opacity: 0.5;" />
+                    
+                </svg>
+            </div>
+        </div>
+        <br>
+        <div class="label-container">
+            <label for="startEdit">Start:
+                <input type="number" id="startEdit" v-model="startEdit" />
+            </label>
+            <label for="endEdit">Ende:
+                <input type="number" id="endEdit" v-model="endEdit" />
+            </label>
+            <label for="durationTotal">Activity total:
+                <input type="number" id="durationTotal" v-model="durationTotal" />
+        </div>
+        </label>
+        <h1>{{ message }}</h1>
+    </div>
+
+
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                startEdit: 20,
+                endEdit: 80,
+                durationTotal: 100,
+                temXpos: 0,
+                scale: 0
+            },
+            methods: {
+                handleMouseDown() {
+                    this.temXpos = event.clientX;
+                    console.log("mouse down");
+                    document.addEventListener('mousemove', this.handleMouseMove);
+                    document.addEventListener('mouseup', this.handleMouseUp);
+                },
+                handleMouseMove(e) {
+                    console.log("mouse move");            
+                    scale = this.durationTotal / document.getElementById("area-control").clientWidth;
+                    console.log(scale); 
+                    this.endEdit = this.endEdit + ((e.clientX - this.temXpos))*scale;
+                    this.startEdit = this.startEdit + ((e.clientX - this.temXpos))*scale;
+                    this.temXpos = e.clientX;
+                },
+                handleMouseUp() {
+                    console.log("mouse up");
+                    document.removeEventListener('mousemove', this.handleMouseMove);
+                    document.removeEventListener('mouseup', this.handleMouseUp);
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

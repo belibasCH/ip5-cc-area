@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+}
+#editor-container{
+    width: 100%;
+    position: relative;
+}
+#chart-container{
+    position: relative;
+    height: 300px;
+}
+#chart-container svg{
+   position: absolute;
+}
+#app {
+    position: relative;
+}
+#dragable {
+    cursor: pointer;
+}
