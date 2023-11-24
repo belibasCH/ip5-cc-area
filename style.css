@@ -9,12 +9,28 @@ body {
     position: relative;
     height: 300px;
 }
-#chart-container svg{
+#chart-container *{
    position: absolute;
+   background-size: contain;
 }
 #app {
     position: relative;
 }
 #dragable {
     cursor: pointer;
+}
+.col-resize{
+    cursor: col-resize;
+}
+ #control-container {
+    margin-top: 10px;
+ }
+ path {
+	stroke: black;
+	stroke-width: 1;
+}
+
+pattern path {
+	stroke: lightgrey;
+	fill: none;
 }

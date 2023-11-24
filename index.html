@@ -9,25 +9,49 @@
 
 <body>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
-
     <div id="app">
+        <h1>{{ message }}</h1>
         <div id="editor-container">
             <div id="chart-container">
-                <svg id="chart-svg" height="300px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'">
-                    <rect id="chart" x="0" y="0" width="100%" height="100%" fill="orange" />
-                </svg>
-                <svg id="chart-svg" height="300px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'">
-                    <rect x="0" y="0" :width="startEdit" height="100%" fill="white" style="opacity: 0.5;" />
-                    <rect :x="endEdit" y="0" :width="durationTotal-endEdit" height="100%" fill="white" style="opacity: 0.5;" />
+                <img id="chart" src="chart.png" alt="chart" height="100%" />
+                <svg id="overlay-svg" height="300px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'"
+                    preserveAspectRatio="none">
+                    <rect îd="overlay-left" x="0" y="0" :width="startEdit" height="100%" fill="white"
+                        style="opacity: 0.5;" />
+                    <rect îd="overlay-right" :x="endEdit" y="0" :width="durationTotal-endEdit" height="100%"
+                        fill="white" style="opacity: 0.5" /> />
+                    <rect îd="stroke-right" :x="endEdit" y="0" width="0.3" height="100%" fill="black" /> />
+                    <rect îd="stroke-left" :x="startEdit" y="0" width="0.3" height="100%" fill="black" /> />
                 </svg>
             </div>
             <div id="control-container">
                 <svg id="area-control" height="20px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'"
                     preserveAspectRatio="none">
-                    <rect x="0" y="0" width="100%" height="100%" fill="grey" style="opacity: 0.5;" />
-                    <rect id="dragable" @mousedown="handleMouseDown" :x="startEdit" y="0" :width="endEdit-startEdit" height="100%" fill="grey"
+                    <defs>
+                        <pattern id="grid" patternUnits="userSpaceOnUse" width="3" height="3" x="0" y="0">
+                            <desc>Raster</desc>
+                            <path d="M0,0 v3 h3" />
+                        </pattern>
+                    </defs>
+                    <rect id="dragable-background" x="0" y="0" width="100%" height="100%" fill="url(#grid)"
                         style="opacity: 0.5;" />
-                    
+                    <g id="dragable-group">
+                        <rect id="dragable" @mousedown="handleDragDown" :x="startEdit" y="0" :width="endEdit-startEdit"
+                        height="100%" fill="#e2e1e0" />
+                        <circle id="dragable-handler" @mousedown="handleStartDown" :cx="(endEdit-startEdit)/2*scale" cy="10" r="5"
+                            fill="#86909B" />
+                    </g>
+                    <g id="end-handler-group">
+                        <rect class="col-resize" @mousedown="handleEndDown" :x="endEdit-1" y="0" width="2" height="100%"
+                            fill="transparent" />
+                        <rect class="col-resize" :x="endEdit" y="0" width="0.3" height="100%" fill="#86909B" />
+                    </g>
+                    <g id="start-handler-group">
+                        <rect class="col-resize" @mousedown="handleStartDown" :x="startEdit-1" y="0" width="2"
+                            height="100%" fill="transparent" />
+                        <rect class="col-resize" :x="startEdit" y="0" width="0.3" height="100%" fill="#86909B" />
+                    </g>
+
                 </svg>
             </div>
         </div>
@@ -43,44 +67,84 @@
                 <input type="number" id="durationTotal" v-model="durationTotal" />
         </div>
         </label>
-        <h1>{{ message }}</h1>
+
     </div>
-
-
 
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!',
+                message: 'Area Editor',
                 startEdit: 20,
                 endEdit: 80,
                 durationTotal: 100,
                 temXpos: 0,
                 scale: 0
             },
+            mounted() {
+                this.scale = this.durationTotal / document.getElementById("area-control").clientWidth;
+                console.log(this.scale);
+            },
             methods: {
-                handleMouseDown() {
+                handleDragDown(event) {
                     this.temXpos = event.clientX;
                     console.log("mouse down");
-                    document.addEventListener('mousemove', this.handleMouseMove);
-                    document.addEventListener('mouseup', this.handleMouseUp);
+                    document.addEventListener('mousemove', this.handleDragMove);
+                    document.addEventListener('mouseup', this.handleDragUp);
                 },
-                handleMouseMove(e) {
-                    console.log("mouse move");            
-                    scale = this.durationTotal / document.getElementById("area-control").clientWidth;
-                    console.log(scale); 
-                    this.endEdit = this.endEdit + ((e.clientX - this.temXpos))*scale;
-                    this.startEdit = this.startEdit + ((e.clientX - this.temXpos))*scale;
+                handleDragMove(e) {
+                    console.log("mouse move");
+                    // scale = this.durationTotal / document.getElementById("area-control").clientWidth;
+                    console.log(scale);
+                    this.endEdit = this.endEdit + ((e.clientX - this.temXpos)) * scale;
+                    this.startEdit = this.startEdit + ((e.clientX - this.temXpos)) * scale;
                     this.temXpos = e.clientX;
                 },
-                handleMouseUp() {
+                handleDragUp() {
                     console.log("mouse up");
-                    document.removeEventListener('mousemove', this.handleMouseMove);
-                    document.removeEventListener('mouseup', this.handleMouseUp);
+                    document.removeEventListener('mousemove', this.handleDragMove);
+                    document.removeEventListener('mouseup', this.handleDragUp);
+                },
+                handleEndDown() {
+                    this.temXpos = event.clientX;
+                    console.log("mouse down");
+                    document.addEventListener('mousemove', this.handleEndMove);
+                    document.addEventListener('mouseup', this.handleEndUp);
+                },
+                handleEndMove(e) {
+                    console.log("mouse move");
+                    // scale = this.durationTotal / document.getElementById("area-control").clientWidth;
+                    this.endEdit = e.clientX * scale;
+                    this.endEdit = this.endEdit + ((e.clientX - this.temXpos)) * scale;
+                    this.temXpos = e.clientX;
+                },
+                handleEndUp() {
+                    console.log("mouse up");
+                    document.removeEventListener('mousemove', this.handleEndMove);
+                    document.removeEventListener('mouseup', this.handleEndUp);
+                },
+                handleStartDown() {
+                    this.temXpos = event.clientX;
+                    console.log("mouse down");
+                    document.addEventListener('mousemove', this.handleStartMove);
+                    document.addEventListener('mouseup', this.handleStartUp);
+                },
+                handleStartMove(e) {
+                    console.log("mouse move");
+                    // scale = this.durationTotal / document.getElementById("area-control").clientWidth;
+                    this.startEdit = e.clientX * scale;
+                    this.startEdit = this.startEdit + ((e.clientX - this.temXpos)) * scale;
+                    this.temXpos = e.clientX;
+                },
+                handleStartUp() {
+                    console.log("mouse up");
+                    document.removeEventListener('mousemove', this.handleStartMove);
+                    document.removeEventListener('mouseup', this.handleStartUp);
                 }
+
             }
-        })
+        });
+
     </script>
 
 </body>
