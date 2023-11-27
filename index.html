@@ -20,53 +20,56 @@
                         style="opacity: 0.5;" />
                     <rect îd="overlay-right" :x="endEdit" y="0" :width="durationTotal-endEdit" height="100%"
                         fill="white" style="opacity: 0.5" /> />
-                    <rect îd="stroke-right" :x="endEdit" y="0" width="0.3" height="100%" fill="black" /> />
-                    <rect îd="stroke-left" :x="startEdit" y="0" width="0.3" height="100%" fill="black" /> />
+                    <rect îd="stroke-right" :x="endEdit" y="0" :width="durationTotal/500" height="100%" fill="black" />
+                    />
+                    <rect îd="stroke-left" :x="startEdit" y="0" :width="durationTotal/500" height="100%" fill="black" />
+                    />
                 </svg>
             </div>
             <div id="control-container">
                 <svg id="area-control" height="20px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'"
                     preserveAspectRatio="none">
-                    <defs>
-                        <pattern id="grid" patternUnits="userSpaceOnUse" width="3" height="3" x="0" y="0">
-                            <desc>Raster</desc>
-                            <path d="M0,0 v3 h3" />
-                        </pattern>
-                    </defs>
-                    <rect id="dragable-background" x="0" y="0" width="100%" height="100%" fill="url(#grid)"
+
+                    <rect id="dragable-background" x="0" y="0" width="100%" height="100%" fill="#EEEEEE"
                         style="opacity: 0.5;" />
-                    <g id="dragable-group">
-                        <rect id="dragable" @mousedown="handleDragDown" :x="startEdit" y="0" :width="endEdit-startEdit"
+                    <g id="dragable-group" @mousedown="handleDragDown">
+                        <rect id="dragable"  :x="startEdit" y="0" :width="endEdit-startEdit"
                             height="100%" fill="#e2e1e0" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)" y="7" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)-1" y="7" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)+1" y="7" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)" y="13" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)-1" y="13" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
-                        <rect class="dragable-handler" @mousedown="handleStartDown"
-                            :x="(startEdit+ (endEdit-startEdit)/2)+1" y="13" height="2" width="0.4" fill="#86909B"
-                            rx="1" />
+                        <rect class="dragable-handler" 
+                            :x="(startEdit+ (endEdit-startEdit)/2)" :y="durationTotal/275" :height="durationTotal/1000"
+                            :width="durationTotal/500" fill="#86909B" :rx="durationTotal" />
+                        <rect class="dragable-handler"
+                            :x="(startEdit+ (endEdit-startEdit)/2)-durationTotal/175" :y="durationTotal/275"
+                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
+                            :rx="durationTotal" />
+                        <rect class="dragable-handler"
+                            :x="(startEdit+ (endEdit-startEdit)/2)+durationTotal/175" :y="durationTotal/275"
+                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
+                            :rx="durationTotal" />
+                        <rect class="dragable-handler"
+                            :x="(startEdit+ (endEdit-startEdit)/2)" :y="durationTotal/175" :height="durationTotal/1000"
+                            :width="durationTotal/500" fill="#86909B" :rx="durationTotal" />
+                        <rect class="dragable-handler"
+                            :x="(startEdit+ (endEdit-startEdit)/2)-durationTotal/175" :y="durationTotal/175"
+                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
+                            :rx="durationTotal" />
+                        <rect class="dragable-handler"
+                            :x="(startEdit+ (endEdit-startEdit)/2)+durationTotal/175" :y="durationTotal/175"
+                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
+                            :rx="durationTotal" />
 
                     </g>
-                    <g id="end-handler-group">
-                        <rect class="col-resize" @mousedown="handleEndDown" :x="endEdit-1" y="0" width="2" height="100%"
-                            fill="transparent" />
-                        <rect class="col-resize" :x="endEdit" y="0" width="0.3" height="100%" fill="#86909B" />
+                    <g id="end-handler-group" @mousedown="handleEndDown">
+                        <rect class="col-resize"  :x="endEdit-durationTotal/200" y="0"
+                            :width="durationTotal/100" height="100%" fill="transparent" />
+                        <rect class="col-resize" :x="endEdit" y="0" :width="durationTotal/500" height="100%"
+                            fill="#86909B" />
                     </g>
-                    <g id="start-handler-group">
-                        <rect class="col-resize" @mousedown="handleStartDown" :x="startEdit-1" y="0" width="2"
-                            height="100%" fill="transparent" />
-                        <rect class="col-resize" :x="startEdit" y="0" width="0.3" height="100%" fill="#86909B" />
+                    <g id="start-handler-group" @mousedown="handleStartDown">
+                        <rect class="col-resize"  :x="startEdit-(durationTotal/200)" y="0"
+                            :width="durationTotal/100" height="100%" fill="transparent" />
+                        <rect class="col-resize" :x="startEdit" y="0" :width="durationTotal/500" height="100%"
+                            fill="#86909B" />
                     </g>
 
                 </svg>
@@ -92,76 +95,78 @@
             el: '#app',
             data: {
                 message: 'Area Editor',
-                startEdit: 20,
-                endEdit: 80,
-                durationTotal: 100,
+                startEdit: 1000,
+                endEdit: 1500,
+                durationTotal: 4000,
                 temXpos: 0,
-                scale: 0
+                scale: 0,
+                boundHandleEndMove: null,
+                boundHandleEndUp: null,
             },
 
             mounted() {
-                // Event-Listener beim Laden der Komponente hinzufügen
-                window.addEventListener('resize', this.handleResize);
-                this.handleResize(); // Optional: Funktion direkt beim Laden aufrufen
+                window.addEventListener('resize', this.resizeWindow);
+                this.resizeWindow();
             },
             beforeDestroy() {
-                // Event-Listener vor dem Zerstören der Komponente entfernen
-                window.removeEventListener('resize', this.handleResize);
+                window.removeEventListener('resize', this.resizeWindow);
             },
             methods: {
-                handleResize() {
+                resizeWindow() {
                     this.scale = this.durationTotal / document.getElementById("area-control").clientWidth;
-    
                 },
                 handleDragDown(event) {
                     this.temXpos = event.clientX;
-                    document.addEventListener('mousemove', this.handleDragMove);
-                    document.addEventListener('mouseup', this.handleDragUp);
+                    document.addEventListener('mousemove', this.handleDragMove );
+                    document.addEventListener('mouseup', this.handleDragUp );
                 },
                 handleDragMove(e) {
                     this.endEdit = this.endEdit + ((e.clientX - this.temXpos)) * this.scale;
                     this.startEdit = this.startEdit + ((e.clientX - this.temXpos)) * this.scale;
+                    this.endEdit = Math.round(this.endEdit);
+                    this.startEdit = Math.round(this.startEdit);
                     this.temXpos = e.clientX;
                 },
                 handleDragUp() {
-                    console.log("mouse up");
-                    document.removeEventListener('mousemove', this.handleDragMove);
-                    document.removeEventListener('mouseup', this.handleDragUp);
+                    document.removeEventListener('mousemove', this.handleDragMove );
+                    document.removeEventListener('mouseup', this.handleDragUp );
                 },
                 handleEndDown() {
                     this.temXpos = event.clientX;
-                    console.log("mouse down");
-                    document.addEventListener('mousemove', this.handleEndMove);
-                    document.addEventListener('mouseup', this.handleEndUp);
+                    this.boundHandleEndMove = this.handleEndMove ;
+                    this.boundHandleEndUp = this.handleEndUp ;
+                    console.log("mousedown end: ", this.temXpos);
+                    document.addEventListener('mousemove', this.boundHandleEndMove);
+                    document.addEventListener('mouseup', this.boundHandleEndUp);
+
                 },
                 handleEndMove(e) {
-                    console.log("mouse move");
+                    console.log("mousemove: ", e.clientX);
                     this.endEdit = e.clientX * this.scale;
                     this.endEdit = this.endEdit + ((e.clientX - this.temXpos)) * this.scale;
+                    this.endEdit = Math.round(this.endEdit);
                     this.temXpos = e.clientX;
                 },
                 handleEndUp() {
-                    console.log("mouse up");
-                    document.removeEventListener('mousemove', this.handleEndMove);
-                    document.removeEventListener('mouseup', this.handleEndUp);
+                    console.log("mouseup: ", this.temXpos);
+                    document.removeEventListener('mousemove', this.boundHandleEndMove);
+                    document.removeEventListener('mouseup', this.boundHandleEndUp);
                 },
                 handleStartDown() {
                     this.temXpos = event.clientX;
-                    console.log("mouse down");
-                    document.addEventListener('mousemove', this.handleStartMove);
-                    document.addEventListener('mouseup', this.handleStartUp);
+                    console.log("mousedown start: ", this.temXpos);
+                    document.addEventListener('mousemove', this.handleStartMove );
+                    document.addEventListener('mouseup', this.handleStartUp );
                 },
                 handleStartMove(e) {
-                    console.log("mouse move");
-                    // scale = this.durationTotal / document.getElementById("area-control").clientWidth;
                     this.startEdit = e.clientX * this.scale;
                     this.startEdit = this.startEdit + ((e.clientX - this.temXpos)) * this.scale;
+                    this.startEdit = Math.round(this.startEdit);
                     this.temXpos = e.clientX;
                 },
                 handleStartUp() {
-                    console.log("mouse up");
-                    document.removeEventListener('mousemove', this.handleStartMove);
-                    document.removeEventListener('mouseup', this.handleStartUp);
+                    document.removeEventListener('mousemove', this.handleStartMove );
+                    document.removeEventListener('mouseup', this.handleStartUp );
                 }
 
             }
