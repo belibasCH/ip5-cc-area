@@ -29,34 +29,23 @@
             <div id="control-container">
                 <svg id="area-control" height="20px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 20'"
                     preserveAspectRatio="none">
+                   
 
                     <rect id="dragable-background" x="0" y="0" width="100%" height="100%" fill="#EEEEEE"
                         style="opacity: 0.5;" />
                     <g id="dragable-group" @mousedown="handleDragDown">
                         <rect id="dragable"  :x="startEdit" y="0" :width="endEdit-startEdit"
                             height="100%" fill="#e2e1e0" />
-                        <rect class="dragable-handler" 
-                            :x="(startEdit+ (endEdit-startEdit)/2)" :y="durationTotal/275" :height="durationTotal/1000"
-                            :width="durationTotal/500" fill="#86909B" :rx="durationTotal" />
-                        <rect class="dragable-handler"
-                            :x="(startEdit+ (endEdit-startEdit)/2)-durationTotal/175" :y="durationTotal/275"
-                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
-                            :rx="durationTotal" />
-                        <rect class="dragable-handler"
-                            :x="(startEdit+ (endEdit-startEdit)/2)+durationTotal/175" :y="durationTotal/275"
-                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
-                            :rx="durationTotal" />
-                        <rect class="dragable-handler"
-                            :x="(startEdit+ (endEdit-startEdit)/2)" :y="durationTotal/175" :height="durationTotal/1000"
-                            :width="durationTotal/500" fill="#86909B" :rx="durationTotal" />
-                        <rect class="dragable-handler"
-                            :x="(startEdit+ (endEdit-startEdit)/2)-durationTotal/175" :y="durationTotal/175"
-                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
-                            :rx="durationTotal" />
-                        <rect class="dragable-handler"
-                            :x="(startEdit+ (endEdit-startEdit)/2)+durationTotal/175" :y="durationTotal/175"
-                            :height="durationTotal/1000" :width="durationTotal/500" fill="#86909B"
-                            :rx="durationTotal" />
+                    
+                            <g id="dragable-dots-group" :style="`transform: translateX(${startEdit+ (endEdit-startEdit)/2}px)`">
+                                <rect class="dragable-handler" x="6" y="4" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"      fill="grey" />
+                                <rect class="dragable-handler" x="0" y="4" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"      fill="grey" />
+                                <rect class="dragable-handler" x="-6" y="4" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"     fill="grey" />
+                                <rect class="dragable-handler" x="6" y="12" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"     fill="grey" />
+                                <rect class="dragable-handler" x="0" y="12" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"     fill="grey" />
+                                <rect class="dragable-handler" x="-6" y="12" height="4" :width="durationTotal/1000*7" :rx="durationTotal/1000*7"    fill="grey" />
+                            </g>
+           
 
                     </g>
                     <g id="end-handler-group" @mousedown="handleEndDown">
@@ -73,6 +62,11 @@
                     </g>
 
                 </svg>
+                <svg id="area-control" height="10px" width="100%" :view-box.camel="'0 0 ' + durationTotal + ' 10'"     preserveAspectRatio="none">
+                    <text class="area-label" :x=startEdit y="10" text-anchor="middle">{{startEdit}}   </text>
+                    <text class="area-label":x=endEdit y="10" text-anchor="middle">{{endEdit}}   </text>
+                </svg>
+                
             </div>
         </div>
         <br>
@@ -95,9 +89,9 @@
             el: '#app',
             data: {
                 message: 'Area Editor',
-                startEdit: 1000,
-                endEdit: 1500,
-                durationTotal: 4000,
+                startEdit: 100,
+                endEdit: 150,
+                durationTotal: 400,
                 temXpos: 0,
                 scale: 0,
                 boundHandleEndMove: null,

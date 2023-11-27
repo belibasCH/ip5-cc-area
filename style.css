@@ -34,3 +34,8 @@ pattern path {
 	stroke: lightgrey;
 	fill: none;
 }
+.area-label {
+    font-size: 10px;
+    font-family: sans-serif;
+    fill: black;
+}
